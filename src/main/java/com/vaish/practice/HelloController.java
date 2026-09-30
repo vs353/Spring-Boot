@@ -35,9 +35,6 @@ public class HelloController {
     @GetMapping("/employees/{id}")
     public ResponseEntity<Employee> getEmployeeById(@PathVariable int id){
         Employee employee = helloService.getEmployeeById(id);
-        if(employee == null){
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok(employee);
     }
 

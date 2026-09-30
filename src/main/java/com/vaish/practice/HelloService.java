@@ -34,7 +34,8 @@ public class HelloService {
 
     public Employee getEmployeeById(int id){
 
-        return getEmployees().stream().filter(e -> e.getId()==id).findFirst().orElse(null);
+        return getEmployees().stream().filter(e -> e.getId()==id).findFirst().orElseThrow(() ->
+                new EmployeeNotFoundException("Employee not found with id: " + id));
     }
     public List<Employee> getHighSalaryEmployees(long salary){
         return getEmployees().stream().filter(e ->e.getSalary()>=salary).toList();
