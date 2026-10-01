@@ -1,6 +1,8 @@
 package com.vaish.practice;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
@@ -9,20 +11,33 @@ import java.util.List;
 
 @Service
 public class HelloService {
-    public boolean deleteEmployee(int id){
-        return employees.removeIf(e-> e.getId()==id);
+
+    public Employee deleteEmployee(int id){
+        Employee deleted = getEmployees().stream().filter(e -> e.getId() ==id)
+                .findFirst().orElseThrow(() ->
+                new EmployeeNotFoundException("Employee Not Existed with id " + id));
+
+        employees.remove(deleted);
+        return deleted;
+//        return employees.removeIf(e-> e.getId()==id);
     }
-    public  Employee updateEmployee(int id, Employee updateEmployee){
-        Employee existingEmployee= getEmployees().stream().filter(e ->e.getId() == id ).findFirst().orElse(null);
-        if(existingEmployee != null){
+
+    public Employee updateEmployee(int id, Employee updateEmployee){
+        Employee existingEmployee= getEmployees().stream().filter(e ->e.getId() == id )
+                .findFirst().orElseThrow(()->
+                        new EmployeeNotFoundException("Employee Not Existed with id " + id));
+
+//        if(existingEmployee != null){
+
             existingEmployee.setName(updateEmployee.getName());
             existingEmployee.setSalary(updateEmployee.getSalary());
-        }
+//        }
         return existingEmployee;
     }
     public String getMessage(){
         return "Hello From Service Layer";
     }
+
     public Employee addEmployee(Employee employee){
         employees.add(employee);
         return employee;

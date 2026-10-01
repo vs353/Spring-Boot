@@ -2,7 +2,6 @@ package com.vaish.practice;
 
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,20 +9,25 @@ import java.util.List;
 
 @RestController
 public class HelloController {
+
     private final HelloService helloService;
+
     public HelloController(HelloService helloService){
         this.helloService = helloService;
     }
+
     @DeleteMapping("/employees/{id}")
-    public ResponseEntity<Void> deleteEmployee(@PathVariable int id){
-        boolean delete = helloService.deleteEmployee(id);
-        if(!delete){
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Employee> deleteEmployee(@PathVariable int id){
+//        boolean delete =
+        Employee deleted = helloService.deleteEmployee(id);
+//        if(!delete){
+//            return ResponseEntity.notFound().build();
+//        }
+        return ResponseEntity.ok(deleted);
     }
+
     @PutMapping("/employees/{id}")
-    public Employee updateEmployee(@PathVariable int id, @RequestBody Employee employee){
+    public Employee updateEmployee( @PathVariable int id, @Valid @RequestBody Employee employee){
         return helloService.updateEmployee(id,employee);
     }
     @PostMapping("/employees")
